@@ -1,6 +1,7 @@
 import './App.css';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider  } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useState } from 'react';
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
@@ -11,53 +12,68 @@ const firebaseConfig = {
   messagingSenderId: "1070815504848",
   appId: "1:1070815504848:web:6658bdcf39c2fdba03b1d5"
 };
-const app= initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const auth = getAuth();
-const provider = new  GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
 function App() {
-  // const createUser=(email,password)=>{
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //   .then((userCredential) => {
-  //     // Signed in 
-  //     const user = userCredential.user;
-  //     // ...
-  //   })
-  //   .catch((error) => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     // ..
-  //   });
-  // }
-  const handelSignIn= ()=>{
+  const [user, setUser] = useState({ isSignedIn: false, email: '', name: '', url: '' })
+  const handelSignIn = () => {
     signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    const {email,displayName,photoURL}=user
-    console.log(user,credential);
-    console.log(email,displayName,photoURL);
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-  });
-
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        const { email, displayName, photoURL } = user
+        const signIndUser = {
+          isSignedIn: true,
+          name: displayName,
+          email: email,
+          url: photoURL
+        }
+        setUser(signIndUser)
+        console.log(user, credential);
+        console.log(email, displayName, photoURL);
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  }
+  const handelSignOut = () => {
+    const signOutUser = {
+      isSignedIn: false,
+      name: '',
+      email: '',
+      url: ''
+    }
+    setUser(signOutUser)
   }
   return (
-    <div className="App"> 
+    <div className="App">
 
-    <h1>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem corporis illo enim consequuntur aspernatur repudiandae. Explicabo, ab. Aspernatur, quos qui!</h1>
-    <button onClick={handelSignIn}>SIGN-IN</button>
+      {!user.isSignedIn ?
+        <button onClick={handelSignIn}>SIGN-IN</button> :
+        <button onClick={handelSignOut}>SIGN-OUT</button>}
+      {user.isSignedIn ?
+
+        <div style={{ border: '2px solid blue', padding: '20px', margin: '20px 500px' }}>
+          <h1>Welcome To Google</h1>
+          <h2>Name: {user.name}</h2>
+          <h3>Email: {user.email}</h3>
+          <img src={user.url} alt="" />
+        </div> :
+        <div><h1>LogIn to Explorer</h1></div>
+      }
+
     </div>
   );
 }
