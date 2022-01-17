@@ -62,17 +62,34 @@ function App() {
       // An error happened.
     });
 
+  }
 
+  const handelBlur=(event)=>{
+    console.log(event.target.name+':', event.target.value);
 
+    
+    if(event.target.name==='email'){
+      const isEmailValid =/\S+@\S+\.\S+/.test(event.target.value)
+      console.log(isEmailValid);
+    }
+    if(event.target.name==='password'){
+      const isPasswordValid =event.target.value.length>6;
+      const hasDigit =/\d{1}/.test(event.target.value);
+      const hasString =/\$/.test(event.target.value);
+      const hasDigitStringSC =/^([a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,~.<>\/?]{6,})$/.test(event.target.value);
 
-
+      console.log(isPasswordValid&&hasDigit&&hasString);
+    }
+  }
+  const handelSubmit=()=>{
+    console.log('sumbmi');
   }
   return (
     <div className="App">
 
       {!user.isSignedIn ?
-        <button onClick={handelSignIn}>SIGN-IN</button> :
-        <button onClick={handelSignOut}>SIGN-OUT</button>}
+        <button onClick={handelSignIn}>Continue With Google</button> :
+        <button onClick={handelSignOut}>Log-Out</button>}
       {user.isSignedIn ?
 
         <div style={{ border: '2px solid blue', padding: '20px', margin: '20px 500px' }}>
@@ -80,11 +97,24 @@ function App() {
           <img src={user.url} alt="" width='200px' />
           <h3>contact: {user.email}</h3>
         </div> :
-        <div><h1>LogIn to Enter</h1></div>
+        <div></div>
       }
+      <div>
+      <h2>Continue With Email</h2>
+
+      <form onSubmit={handelSubmit}>
+
+      <input type="text" name="email" id="email" placeholder='Email' autoComplete='username' required                      onBlur={handelBlur}/> <br />
+      <input type="password" name="password" id="password" placeholder='Password' autoComplete='current-password' required onBlur={handelBlur}/><br />
+      <input type="submit" value='Sign-In'/>
+      </form>
+      
+      </div>
 
     </div>
+    
   );
 }
+
 
 export default App;
