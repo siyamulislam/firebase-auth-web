@@ -1,6 +1,6 @@
 import './App.css';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { useState } from 'react';
 
 // TODO: Replace the following with your app's Firebase project configuration
@@ -55,7 +55,17 @@ function App() {
       email: '',
       url: ''
     }
-    setUser(signOutUser)
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      setUser(signOutUser)
+    }).catch((error) => {
+      // An error happened.
+    });
+
+
+
+
+
   }
   return (
     <div className="App">
@@ -66,12 +76,11 @@ function App() {
       {user.isSignedIn ?
 
         <div style={{ border: '2px solid blue', padding: '20px', margin: '20px 500px' }}>
-          <h1>Welcome To Google</h1>
-          <h2>Name: {user.name}</h2>
-          <h3>Email: {user.email}</h3>
-          <img src={user.url} alt="" />
+          <h1>Welcome, {user.name}</h1>
+          <img src={user.url} alt="" width='200px' />
+          <h3>contact: {user.email}</h3>
         </div> :
-        <div><h1>LogIn to Explorer</h1></div>
+        <div><h1>LogIn to Enter</h1></div>
       }
 
     </div>
