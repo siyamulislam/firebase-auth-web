@@ -34,8 +34,6 @@ function App() {
           url: photoURL
         }
         setUser(signIndUser)
-        console.log(user, credential);
-        console.log(email, displayName, photoURL);
         // ...
       }).catch((error) => {
         // Handle Errors here.
@@ -53,7 +51,8 @@ function App() {
       isSignedIn: false,
       name: '',
       email: '',
-      url: ''
+      url: '',
+      error:''
     }
     signOut(auth).then(() => {
       // Sign-out successful.
@@ -84,6 +83,7 @@ function App() {
     if (isFormValid) {
       const newUserInfo = { ...user }
       newUserInfo[event.target.name] = event.target.value
+      newUserInfo.error='';
       setUser(newUserInfo)
 
     }
@@ -97,22 +97,21 @@ function App() {
         .then((userCredential) => {
           // Signed in 
           const user1 = userCredential.user;
-          console.log(user1);
-          const { email, displayName, photoURL } = user
+          const { email, name, photoURL,password } = user
           const signIndUser = {
             isSignedIn: true,
-            name: displayName,
+            name: name,
             email: email,
-            url: photoURL
+            url: 'https://scontent.fdac24-2.fna.fbcdn.net/v/t1.6435-9/182163666_111029064475100_7524300687755693886_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=174925&_nc_eui2=AeG2IL4ualgmM_4ANNDwQAN5XnRYagEb0lBedFhqARvSUCmTA0LZS751uzQakWd5SBrGXeTfPrJt3bJcmHBMZ28Q&_nc_ohc=-7P-_zMexzEAX-5G1qI&_nc_ht=scontent.fdac24-2.fna&oh=00_AT9_C0utKeNdD4tKGiAZe-xeBlCfJcgF9BhAl6saiN3rTQ&oe=620DC02A',
+            password:password
           }
           setUser(signIndUser)
-          console.log(signIndUser);
           // ...
         })
-        .catch((error) => {
-          console.log(error);
-          const errorCode = error.code;
-          const errorMessage = error.message;
+        .catch((error) => { 
+          const newUser={...user};
+          newUser.error=error.message;
+          setUser(newUser)
           // ..
         });
     }
@@ -131,9 +130,9 @@ function App() {
             <input type="password" name="password" id="password" placeholder='Password' autoComplete='current-password' required onBlur={handelBlur} /><br />
             <input type="submit" value='Sign-In' />
           </form>
+          <p style={{color:'red'}}>{user.error}</p>
         </div> :
         <button onClick={handelSignOut}>Log-Out</button>}
-        {  console.log(user)}
       {user.isSignedIn ?
       
         <div style={{ border: '2px solid blue', padding: '20px', margin: '20px 500px' }}>
