@@ -31,7 +31,7 @@ function App() {
           isSignedIn: true,
           name: displayName,
           email: email,
-          url: photoURL
+          url: photoURL,
         }
         setUser(signIndUser)
         // ...
@@ -52,7 +52,8 @@ function App() {
       name: '',
       email: '',
       url: '',
-      error:''
+      error: '',
+      isSuccess: false
     }
     signOut(auth).then(() => {
       // Sign-out successful.
@@ -83,7 +84,7 @@ function App() {
     if (isFormValid) {
       const newUserInfo = { ...user }
       newUserInfo[event.target.name] = event.target.value
-      newUserInfo.error='';
+      newUserInfo.error = '';
       setUser(newUserInfo)
 
     }
@@ -97,20 +98,24 @@ function App() {
         .then((userCredential) => {
           // Signed in 
           const user1 = userCredential.user;
-          const { email, name, photoURL,password } = user
+          const { email, name, photoURL, password } = user
           const signIndUser = {
             isSignedIn: true,
             name: name,
             email: email,
             url: 'https://scontent.fdac24-2.fna.fbcdn.net/v/t1.6435-9/182163666_111029064475100_7524300687755693886_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=174925&_nc_eui2=AeG2IL4ualgmM_4ANNDwQAN5XnRYagEb0lBedFhqARvSUCmTA0LZS751uzQakWd5SBrGXeTfPrJt3bJcmHBMZ28Q&_nc_ohc=-7P-_zMexzEAX-5G1qI&_nc_ht=scontent.fdac24-2.fna&oh=00_AT9_C0utKeNdD4tKGiAZe-xeBlCfJcgF9BhAl6saiN3rTQ&oe=620DC02A',
-            password:password
+            password: password,
+            isSuccess: true
+
           }
+          console.log("SignedIn USer" + signIndUser);
+          console.log( signIndUser);
           setUser(signIndUser)
           // ...
         })
-        .catch((error) => { 
-          const newUser={...user};
-          newUser.error=error.message;
+        .catch((error) => {
+          const newUser = { ...user };
+          newUser.error = error.message;
           setUser(newUser)
           // ..
         });
@@ -130,14 +135,19 @@ function App() {
             <input type="password" name="password" id="password" placeholder='Password' autoComplete='current-password' required onBlur={handelBlur} /><br />
             <input type="submit" value='Sign-In' />
           </form>
-          <p style={{color:'red'}}>{user.error}</p>
+          <p style={{ color: 'red' }}>{user.error}</p>
         </div> :
-        <button onClick={handelSignOut}>Log-Out</button>}
+        <div>
+            { <p style={{ color: 'green' }}>User Created Successfully !</p>}
+          <button onClick={handelSignOut}>Log-Out</button>
+        </div>}
+
+
       {user.isSignedIn ?
-      
+
         <div style={{ border: '2px solid blue', padding: '20px', margin: '20px 500px' }}>
           <h1>Welcome, {user.name}</h1>
-          <img src={user.url} alt="" width='200px' />
+          <img src={user.url} alt="" width='50px' />
           <h3>contact: {user.email}</h3>
           <h3>password: {user.password}</h3>
         </div> :
