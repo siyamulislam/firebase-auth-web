@@ -18,6 +18,7 @@ const provider = new GoogleAuthProvider();
 
 function App() {
   const [user, setUser] = useState({ isSignedIn: false, email: '', name: '', url: '', password: '' })
+  let haveAccount=false;
   const handelSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -36,14 +37,7 @@ function App() {
         setUser(signIndUser)
         // ...
       }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        console.log(error);
       });
   }
   const handelSignOut = () => {
@@ -61,7 +55,6 @@ function App() {
     }).catch((error) => {
       // An error happened.
     });
-
   }
 
   const handelBlur = (event) => {
@@ -86,7 +79,6 @@ function App() {
       newUserInfo[event.target.name] = event.target.value
       newUserInfo.error = '';
       setUser(newUserInfo)
-
     }
   }
   const handelSubmit = (e) => {
@@ -106,10 +98,9 @@ function App() {
             url: 'https://scontent.fdac24-2.fna.fbcdn.net/v/t1.6435-9/182163666_111029064475100_7524300687755693886_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=174925&_nc_eui2=AeG2IL4ualgmM_4ANNDwQAN5XnRYagEb0lBedFhqARvSUCmTA0LZS751uzQakWd5SBrGXeTfPrJt3bJcmHBMZ28Q&_nc_ohc=-7P-_zMexzEAX-5G1qI&_nc_ht=scontent.fdac24-2.fna&oh=00_AT9_C0utKeNdD4tKGiAZe-xeBlCfJcgF9BhAl6saiN3rTQ&oe=620DC02A',
             password: password,
             isSuccess: true
-
           }
           console.log("SignedIn USer" + signIndUser);
-          console.log( signIndUser);
+          console.log(signIndUser);
           setUser(signIndUser)
           // ...
         })
@@ -124,27 +115,34 @@ function App() {
   }
   return (
     <div className="App">
-
       {!user.isSignedIn ?
         <div>
           <button onClick={handelSignIn}>Continue With Google</button>
-          <h2>Continue With Email</h2>
+          <h3>Continue With Email</h3>
+          <input type="checkbox" name="" id="" /><small>Already have an account?</small>
+          {haveAccount? 
+          <form onSubmit={handelSubmit}>
+            <input type="text" name="name" id="name" placeholder='Name' onBlur={handelBlur} /><br />
+            <input type="text" name="email" id="email" placeholder='Email' autoComplete='username' required onBlur={handelBlur} /><br />
+            <input type="password" name="password" id="password" placeholder='Password' autoComplete='current-password' required onBlur={handelBlur} /><br />
+            <input type="submit" value='Sign-In' />
+          </form>:
           <form onSubmit={handelSubmit}>
             <input type="text" name="name" id="name" placeholder='Name' onBlur={handelBlur} /><br />
             <input type="text" name="email" id="email" placeholder='Email' autoComplete='username' required onBlur={handelBlur} /><br />
             <input type="password" name="password" id="password" placeholder='Password' autoComplete='current-password' required onBlur={handelBlur} /><br />
             <input type="submit" value='Sign-In' />
           </form>
+          }
+
           <p style={{ color: 'red' }}>{user.error}</p>
         </div> :
         <div>
-            { <p style={{ color: 'green' }}>User Created Successfully !</p>}
+          {<p style={{ color: 'green' }}>User Created Successfully !</p>}
           <button onClick={handelSignOut}>Log-Out</button>
         </div>}
 
-
       {user.isSignedIn ?
-
         <div style={{ border: '2px solid blue', padding: '20px', margin: '20px 500px' }}>
           <h1>Welcome, {user.name}</h1>
           <img src={user.url} alt="" width='50px' />
@@ -153,12 +151,8 @@ function App() {
         </div> :
         <div></div>
       }
-
-
     </div>
-
   );
 }
-
 
 export default App;
