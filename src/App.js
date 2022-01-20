@@ -104,13 +104,13 @@ function App() {
         .catch((error) => {
          const newUser = { ...user };
           newUser.error = error.message;
-          setUser(newUser) 
+          setUser(newUser) ;
           // ..
         });
     }
 
     if(!user.newUser&& user.email&&user.password){
-      signInWithEmailAndPassword(auth, user.email, user.password)
+      signInWithEmailAndPassword(auth, user.email, user.password);
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
@@ -121,7 +121,7 @@ function App() {
           email: email,
           url: 'https://scontent.fdac24-2.fna.fbcdn.net/v/t1.6435-9/182163666_111029064475100_7524300687755693886_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=174925&_nc_eui2=AeG2IL4ualgmM_4ANNDwQAN5XnRYagEb0lBedFhqARvSUCmTA0LZS751uzQakWd5SBrGXeTfPrJt3bJcmHBMZ28Q&_nc_ohc=-7P-_zMexzEAX-5G1qI&_nc_ht=scontent.fdac24-2.fna&oh=00_AT9_C0utKeNdD4tKGiAZe-xeBlCfJcgF9BhAl6saiN3rTQ&oe=620DC02A',
           password: password,
-          isSuccess: true
+          isSuccess: true,
         }
         setUser(signIndUser)
         // ...
@@ -129,7 +129,7 @@ function App() {
       .catch((error) => {
         const newUser = { ...user };
           newUser.error = error.message;
-          setUser(newUser)
+          setUser(newUser) 
       });
     }
     e.preventDefault();
