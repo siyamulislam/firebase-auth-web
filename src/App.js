@@ -1,6 +1,6 @@
 import './App.css';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, createUserWithEmailAndPassword,signInWithEmailAndPassword  } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile   } from "firebase/auth";
 import { useState } from 'react';
 
 // TODO: Replace the following with your app's Firebase project configuration
@@ -98,8 +98,9 @@ function App() {
             password: password,
             isSuccess: true
           }
-          setUser(signIndUser)
-          // ...
+          setUser(signIndUser);
+          UpdateUserName(name)  ;
+          console.log('signnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',userCredential.user);        // ...
         })
         .catch((error) => {
          const newUser = { ...user };
@@ -110,8 +111,8 @@ function App() {
     }
 
     if(!user.newUser&& user.email&&user.password){
-      signInWithEmailAndPassword(auth, user.email, user.password);
-      .then((userCredential) => {
+      signInWithEmailAndPassword(auth, user.email, user.password)
+.then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
         const { email, name, photoURL, password } = user;
@@ -133,6 +134,20 @@ function App() {
       });
     }
     e.preventDefault();
+  }
+
+  const UpdateUserName= name=> {
+    updateProfile(auth.currentUser, {
+      displayName:name,
+      //  photoURL: "https://example.com/jane-q-user/profile.jpg"
+    }).then(() => {
+      // Profile updated!
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      // ...
+    });
+    
   }
   return (
     <div className="App">
