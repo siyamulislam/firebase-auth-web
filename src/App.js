@@ -177,7 +177,7 @@ function App() {
            {user.newUser && <div> <input type="text" name="name" id="name" placeholder='Name' onBlur={handelBlur} /><br /></div>}
             <input type="text" name="email" id="email" placeholder='Email' autoComplete='username' required onBlur={handelBlur} /><br />
             <input type="password" name="password" id="password" placeholder='Password' autoComplete='current-password' required onBlur={handelBlur} /><br />
-            <input type="submit" value='Sign-In' />
+            <input type="submit" value= { user.newUser? "Sign Up":"Sign In"} />
           </form>
 
           <p style={{ color: 'red' }}>{user.error}</p>
