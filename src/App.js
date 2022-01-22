@@ -154,7 +154,7 @@ function App() {
       {!user.isSignedIn ?
         <div>
           <button onClick={handelSignIn}>Continue With Google</button>
-          <button>Continue With FaceBook</button>
+          <button>SignIn With FaceBook</button>
           <h3>Continue With Email</h3>
           <input type="checkbox" name="checkUser" id="checkUser"onChange={()=> { 
             //way 1
